@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.thymeleaf.org ">
+<head>
+    <title>Tickets</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="application/json"/>
+</head>
+
+<body>
+<h3><a href="/logout">Log out</a> <a href="/users/all">Users</a> <a href="/tickets/all">Tickets</a></h3>
+<p>
+
+
+</p>
+
+
+<table>
+    <thead>
+    <tr>
+        <th>id</th>
+        <th>users id</th>
+        <th>users login</th>
+        <th>cost</th>
+        <th>date</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="tk:${tickets}">
+        <div th:if="${tk.id == change}">
+            <td colspan="12">
+                <form action="#" th:action="@{/tickets/update}" th:object="${edit}" method="post">
+                    <input type="hidden" th:field="*{id}" id="id">
+<!--                    th:field="*{users.id}"-->
+<!--                    <input type="text" th:field="*{users.id}" id="users.id">-->
+                    <select th:field="*{users.id}" >
+                        <option value="">select User</option>
+                        <option th:each="us:${usr}"
+                                th:value="${us.id}"
+                                th:text="${us.login}+' '+${us.name}+' '+${us.id}">
+
+                        </option>
+                    </select>
+
+                    <label for="cost"></label>
+                    <input type="text" th:field="*{cost}" id="cost">
+                    <input type="date" th:field="*{dateTime}">
+<!--            <td th:text="${#dates.format(tk.dateTime,'dd-MM-yyyy hh:MM')}"></td>-->
+
+            <input type="submit" value="Update Ticket">
+
+                 </form>
+            </td>
+        </div>
+        <div th:unless="${tk.id == change}">
+            <td th:text="${tk.id}"></td>
+            <td th:text="${tk.users.id}"></td>
+            <td th:text="${tk.users.login}"></td>
+            <td th:text="${tk.cost}"></td>
+            <td th:text="${tk.dateTime}"></td>
+            <td>
+                <form action="#" th:action="@{/tickets/remove/{id}(id = ${tk.id})}" th:method="delete">
+                    <input type="hidden" name="_method" value="delete"/>
+                    <button type="submit" id="deleteButton">Ticket User</button>
+                </form>
+            </td>
+            <td>
+                <form action="#" th:action="@{/tickets/edit/{id}(id = ${tk.id})}" th:method="get">
+                    <input type="hidden" name="_method" value="get"/>
+                    <button type="submit" id="editButton">edit Ticket</button>
+                </form>
+
+            </td>
+
+        </div>
+
+
+    </tr>
+    </tbody>
+    <a th:href="@{/tickets/new}">New ticket</a>
+</table>
+<div th:if="${newTick != null}">
+    <form action="#"  th:action = "@{/tickets/add}" th:object="${newTick}" method="post">
+        <select th:field="*{users.id}" >
+            <option value="">select User</option>
+            <option th:each="us:${usr}"
+                    th:value="${us.id}"
+                    th:text="${us.login}+' '+${us.name}">
+
+            </option>
+        </select>
+
+        <label for="ncost"></label>
+        <input type="text" th:field="*{cost}" id="ncost">
+        <input type="date" th:field="*{dateTime}">
+        <!--            <td th:text="${#dates.format(tk.dateTime,'dd-MM-yyyy hh:MM')}"></td>-->
+
+        <input type="submit" value="Create Ticket">
+
+    </form>
+
+</div>
+
+
+
+</body>
+</html>
