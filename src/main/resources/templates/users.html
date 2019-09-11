@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.thymeleaf.org ">
+<head>
+    <title>Users</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="application/json"/>
+</head>
+
+<body>
+<h3><a href="/logout">Log out</a> <a href="/users/all">Users</a> <a href="/tickets/all">Tickets</a></h3>
+<p>
+
+
+</p>
+
+
+<table>
+    <thead>
+    <tr>
+        <th>id</th>
+        <th>login</th>
+        <th>password</th>
+        <th>name</th>
+        <th>surname</th>
+        <th>patronymic</th>
+        <th>role</th>
+        <th>gender</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="user:${users}">
+        <div th:if="${user.id == change}">
+            <td colspan="12">
+                <form action="#" th:action="@{/users/update}" th:object="${edit}" method="post">
+                    <label for="login"></label>
+                    <input type="hidden" th:field="*{id}" id="id">
+                    <input type="text" th:field="*{login}" id="login">
+
+                    <label for="password"></label>
+                    <input type="text" th:field="*{password}" id="password">
+
+                    <label for="name"></label>
+                    <input type="text" th:field="*{name}" id="name">
+
+                    <label for="secondName"></label>
+                    <input type="text" th:field="*{secondName}" id="secondName">
+
+                    <label for="thirdName"></label>
+                    <input type="text" th:field="*{thirdName}" id="thirdName">
+
+                    <input type="radio" th:field="*{roleEntity.id}" value="1" name="group1" id="adminRadio">
+                    <label for="adminRadio">Admin</label>
+
+                    <input type="radio" th:field="*{roleEntity.id}" value="2" name="group1" id="userRadio">
+                    <label for="userRadio">User</label>
+
+                    <input type="radio" th:field="*{genderEntity.id}" value="1" name="group2" id="maleRadio">
+                    <label for="maleRadio">Male</label>
+
+                    <input type="radio" th:field="*{genderEntity.id}" value="2" name="group2" id="femaleRadio">
+                    <label for="femaleRadio">Female</label>
+
+
+                    <input type="submit" value="Update User">
+
+                </form>
+            </td>
+        </div>
+        <div th:unless="${user.id == change}">
+            <td th:text="${user.id}"></td>
+            <td th:text="${user.login}"></td>
+            <td>password encode!</td>
+            <td th:text="${user.name}"></td>
+            <td th:text="${user.secondName}"></td>
+            <td th:text="${user.thirdName}"></td>
+            <td th:text="${user.roleEntity.name}"></td>
+            <td th:text="${user.genderEntity.name}"></td>
+
+            <td>
+                <form action="#" th:action="@{/users/remove/{id}(id = ${user.id})}" th:method="delete">
+                    <input type="hidden" name="_method" value="delete"/>
+                    <button type="submit" id="deleteButton">Delete User</button>
+                </form>
+            </td>
+            <td>
+                <form action="#" th:action="@{/users/edit/{id}(id = ${user.id})}" th:method="get">
+                    <input type="hidden" name="_method" value="get"/>
+                    <button type="submit" id="editButton">edit User</button>
+                </form>
+
+                <!--                <a th:href="@{/users/edit/{id}(id = ${user.id})}">Edit</a>-->
+            </td>
+
+        </div>
+
+
+    </tr>
+    </tbody>
+    <a th:href="@{/users/new}">New User</a>
+</table>
+<div th:if="${newUser != null}">
+    <form action="#" th:action="@{/users/add}" th:object="${newUser}" method="post">
+        <label for="nlogin"></label>
+        <input type="text" th:field="*{login}" id="nlogin">
+
+        <label for="npassword"></label>
+        <input type="text" th:field="*{password}" id="npassword">
+
+        <label for="nname"></label>
+        <input type="text" th:field="*{name}" id="nname">
+
+        <label for="nsecondName"></label>
+        <input type="text" th:field="*{secondName}" id="nsecondName">
+
+        <label for="nthirdName"></label>
+        <input type="text" th:field="*{thirdName}" id="nthirdName">
+
+        <input type="radio" th:field="*{roleEntity.id}" value="1" name="group1" id="nadminRadio">
+        <label for="nadminRadio">Admin</label>
+
+        <input type="radio" th:field="*{roleEntity.id}" value="2" name="group1" id="nuserRadio">
+        <label for="nuserRadio">User</label>
+
+        <input type="radio" th:field="*{genderEntity.id}" value="1" name="group2" id="nmaleRadio">
+        <label for="nmaleRadio">Male</label>
+
+        <input type="radio" th:field="*{genderEntity.id}" value="2" name="group2" id="nfemaleRadio">
+        <label for="nfemaleRadio">Female</label>
+
+
+        <input type="submit" value="Create User">
+
+    </form>
+
+</div>
+
+</body>
+</html>
